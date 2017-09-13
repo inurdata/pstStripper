@@ -10,15 +10,15 @@ import argparse
 #USAGE INFO
 def msg(name=None):
     return '''
-     ________________________
-    |       |          |           |  
-    | _____/ \____     |     ______|_______*____________________
+     ________________________                                       
+    |       |          |           |                             
+    | _____/ \____     |     ______|_______*____________________ 
     |              \   |    \_____ |  |/   ||/  \|/  \/__\|/     
-    |       ______ /   |_________/ |  |    ||\__/|\__/\__ |     
+    |       ______ /   |_________/ |  |    ||\__/|\__/\__ |         
                                             |    |
-                                            |    |                                    
+     __                                     |    |                                    
     /  \      ____________________________________________________________________________
-    |  |     | pstStripper deletes elements from a pst file based on keyword.              \ 
+    |  |     | pstStripper deletes elements from a pst file based on key terms.            \ 
     @  @    / Usage: pstStripper.py -h -i INPUT -o OUTPUT -k KEYFILE -K KEYWORDS -g -G      \ 
     |  |   /  >>>>if you don't specify an output file the output will be saved as output.pst/  
     || |/ /_ ------------------------------------------------------------------------------*
@@ -57,11 +57,36 @@ def setOutFile(inputFile):
 #GUIDED MODE
 if args.guided:
     while inFile is "":
-            inFile = inFile = raw_input("Input your pst file, ie C:\Path\File.pst: ")
+            inFile = raw_input("Input your pst file, ie C:\Path\File.pst: ")
             if inFile == "":
                     print "Please enter a file location!"
+            outFile = raw_input("Input your output file, ie C:\Path\File.pst: ")
+            while keyFile or keywordInput is "":
+                keyFile = raw_input("Input your keyword file, ie C:\Path\keys.txt or press enter to skip: ")
+                keywordInput = raw_input("Input your keywords separated by a comma, ie key1, key2, keyN or press enter to skip: ")
+                if keyFile and keywordInput is "":
+                    print "Please enter a keyword file or input keywords."
+#GUI MODE
+elif args.gui:
+    print "coming soon"
+    exit()
 
-outFile = raw_input("Input your output file, ie C:\Path\File.pst: ")
+#CMD LINE MODE
+elif args.input:
+    inFile = args.input
+    if args.output:
+        outFile = args.output
+    if args.keyfile:
+        keyFile = args.keyfile
+    if args.keywords:
+        keywordInput = args.keywords
+
+#HELP
+else:
+    parser.print_help()
+    exit()
+
+
 
 #ERROR HANDLING & WORK__________________________________________________________________________________________________
 if inFile is "":
@@ -71,10 +96,11 @@ if keys is []:
     print "ERROR: no keyword input"
     exit()
 
-#handle empty outFile input
+#HANDLE EMPTY OUTPUT FILE VAR
 if outFile is "":
     outFile = setOutFile(inFile)
 
+#DO WORK ON PST FILE
 pst = pypff.file(inFile)
 pst.open(inFile)
 pst.close()
